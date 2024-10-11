@@ -1,6 +1,6 @@
-const fetch = require('node-fetch');
+import fetch from 'node-fetch';
 
-exports.handler = async function(event, context) {
+export const handler = async function(event, context) {
   if (event.httpMethod !== 'POST') {
     return { statusCode: 405, body: 'Method Not Allowed' };
   }
@@ -28,6 +28,7 @@ exports.handler = async function(event, context) {
       body: JSON.stringify(data),
     };
   } catch (error) {
+    console.error('Error:', error);
     return { 
       statusCode: 500, 
       body: JSON.stringify({ error: 'Failed to fetch data' }) 
