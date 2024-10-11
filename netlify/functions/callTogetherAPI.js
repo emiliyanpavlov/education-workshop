@@ -22,7 +22,18 @@ export const handler = async function(event, context) {
       }),
     });
 
+    if (!response.ok) {
+      throw new Error(`API responded with status ${response.status}`);
+    }
+
     const data = await response.json();
+    console.log('API response:', data);
+
+    if (!data.choices || !data.choices[0] || typeof data.choices[0].text !== 'string') {
+      console.error('Unexpected API response structure:', data);
+      throw new Error('Unexpected API response structure');
+    }
+
     return {
       statusCode: 200,
       body: JSON.stringify(data),
@@ -31,7 +42,7 @@ export const handler = async function(event, context) {
     console.error('Error:', error);
     return { 
       statusCode: 500, 
-      body: JSON.stringify({ error: 'Failed to fetch data' }) 
+      body: JSON.stringify({ error: error.message, details: error.toString() }) 
     };
   }
 };

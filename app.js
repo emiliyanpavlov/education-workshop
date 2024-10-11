@@ -159,21 +159,41 @@ function clearChat(chatType) {
 }
 
 async function callLLMAPI(prompt) {
-    const response = await fetch('/.netlify/functions/callTogetherAPI', {
-        method: 'POST',
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ prompt })
-    });
+    try {
+        const response = await fetch('/.netlify/functions/callTogetherAPI', {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ 
+                prompt,
+                model: 'INSAIT-Institute/bggpt-stage3-RFLC-Bigbalance-Duolingual-v2',
+                max_tokens: 2048,
+                truncate: 8192,
+                temperature: 0.1,
+                top_k: 20,
+                repetition_penalty: 1.1,
+                stream: false
+            })
+        });
 
-    if (!response.ok) {
-        console.error('Error calling API');
-        return 'An error occurred while processing your request.';
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        console.log('API response:', data);
+
+        if (!data.choices || !data.choices[0] || typeof data.choices[0].text !== 'string') {
+            console.error('Unexpected API response structure:', data);
+            throw new Error('Unexpected API response structure');
+        }
+
+        return data.choices[0].text.trim();
+    } catch (error) {
+        console.error('Error calling LLM API:', error);
+        return `An error occurred while processing your request: ${error.message}`;
     }
-
-    const data = await response.json();
-    return data.choices[0].text.trim();
 }
 
 // Completion request configuration
