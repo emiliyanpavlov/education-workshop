@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LLM Workshop App</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        .user-message {
+            background-color: #e6f3ff;
+            border-radius: 10px;
+            padding: 10px;
+            margin: 5px 0;
+            max-width: 80%;
+            align-self: flex-end;
+        }
+        .assistant-message {
+            background-color: #f0f0f0;
+            border-radius: 10px;
+            padding: 10px;
+            margin: 5px 0;
+            max-width: 80%;
+            align-self: flex-start;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 p-4">
+    <div class="max-w-4xl mx-auto bg-white rounded-lg shadow-md p-6">
+        <h1 class="text-3xl font-bold mb-6 text-center">Демо работилница</h1>
+        
+        <div class="mb-4">
+            <div class="flex border-b">
+                <button id="grammar-tab" class="px-4 py-2 text-sm font-medium text-center text-gray-500 bg-gray-100 rounded-t-lg hover:bg-gray-200 focus:outline-none active">Поправка</button>
+                <button id="debate-tab" class="px-4 py-2 text-sm font-medium text-center text-gray-500 bg-gray-100 rounded-t-lg hover:bg-gray-200 focus:outline-none ml-2">Асистент дебати</button>
+            </div>
+        </div>
+        
+        <div id="grammar-content" class="tab-content active">
+            <h2 class="text-xl font-semibold mb-4">Поправяне на грешки в текст</h2>
+            <div id="grammar-chat" class="mb-4 h-64 overflow-y-auto border rounded p-2 flex flex-col"></div>
+            <textarea id="grammar-input" class="w-full p-2 border rounded" rows="3" placeholder="Enter text to fix grammar and punctuation..."></textarea>
+            <div class="flex justify-between mt-2">
+                <button id="fix-grammar" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">Поправи</button>
+                <button id="clear-grammar" class="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600">Изчисти чат</button>
+            </div>
+        </div>
+        
+        <div id="debate-content" class="tab-content">
+            <h2 class="text-xl font-semibold mb-4">Асистент по дебати</h2>
+            <div id="debate-chat" class="mb-4 h-64 overflow-y-auto border rounded p-2 flex flex-col"></div>
+            <select id="debate-topic" class="w-full p-2 border rounded mb-2">
+                <option value="">Изберете тема</option>
+                <option value="krastavici">Настъргани краставици в таратора</option>
+                <option value="pizza">Ананас на пица</option>
+                <option value="books">Трябва ли хартиените книги да се предпочитат пред аудиокнигите?</option>
+            </select>
+            <select id="debate-side" class="w-full p-2 border rounded mb-2">
+                <option value="">Изберете страна</option>
+                <option value="za">За</option>
+                <option value="protiv">Против</option>
+            </select>
+            <div class="flex justify-between mt-2">
+                <button id="generate-debate" class="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600">Започни дебат</button>
+                <button id="clear-debate" class="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600">Изчисти чат</button>
+            </div>
+            <textarea id="debate-input" class="w-full p-2 border rounded mt-2" rows="3" placeholder="Въведете вашия аргумент..."></textarea>
+            <button id="send-argument" class="mt-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">Изпрати аргумент</button>
+        </div>
+    </div>
+    <script src="app.js" type="text/javascript"></script>
+</body>
+</html>
