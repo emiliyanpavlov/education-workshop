@@ -101,15 +101,18 @@ async function fixGrammar() {
     const prompt = `<s>[INST] ${grammarPrompt}\n\n Съобщение: ${text} [/INST]`;
     const response = await callLLMAPI(prompt);
     
-    // Split the response into Асистент and actual content
-    const [assistantPart, ...contentParts] = response.split(':');
-    const content = contentParts.join(':').trim();
+    console.log('Grammar fix response:', response);
 
-    updateChat('grammar', `Потребител: ${text}`);
-    updateChat('grammar', `Асистент: ${content}`);
+    // Check if the response is an error message
+    if (response.startsWith('An error occurred')) {
+        updateChat('grammar', `Асистент: ${response}`);
+    } else {
+        updateChat('grammar', `Потребител: ${text}`);
+        updateChat('grammar', `Асистент: ${response}`);
+    }
+
     document.getElementById('grammar-input').value = '';
 }
-
 
 function updateChat(chatType, message) {
     const chatElement = document.getElementById(`${chatType}-chat`);
